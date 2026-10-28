@@ -18,7 +18,7 @@ add_custom_target(acva ALL
     -P ${version_script}
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     SOURCES version.h.in
-    BYPRODUCTS version.rc version.h
+    BYPRODUCTS version.h
 )
 
 target_sources(acva PRIVATE ${vesion_script})
