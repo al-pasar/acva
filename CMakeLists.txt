@@ -22,8 +22,3 @@ add_custom_target(version_info ALL
 )
 
 target_sources(version_info PRIVATE ${vesion_script})
-
-if(NOT DEFINED BUILD_EXAMPLES)
-    add_subdirectory(examples)
-endif()
-
