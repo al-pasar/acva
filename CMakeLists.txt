@@ -6,7 +6,7 @@ cmake_minimum_required(VERSION 3.20)
 project(acva)
 
 if(NOT DEFINED acva_dir)
-    set(acva_dir ${CMAKE_BINARY_DIR}/acva)
+    set(acva_dir ${CMAKE_BINARY_DIR}/acva) # base dir unless specified externally
 endif()
 
 # Use GitVersion.cmake to obtain version info from git tags 
@@ -16,6 +16,7 @@ add_custom_target(acva ALL
     COMMAND ${CMAKE_COMMAND}
     -DOUTPUT_DIR=${acva_dir}
     -P ${version_script}
+    COMMENT "Generating version files"
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     SOURCES version.h.in
     BYPRODUCTS version.h
