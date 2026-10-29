@@ -2,8 +2,9 @@ find_package(Git QUIET)
 if(NOT GIT_FOUND)
     message(FATAL_ERROR "Git not found!")
 else()
+    set(DIR_UP -C ..)
     # try to get last tag from git and set VERSION_STRING to it
-    execute_process(COMMAND ${GIT_EXECUTABLE} describe --abbrev=0 --tags --match "v[0-9]*.[0-9]*"
+    execute_process(COMMAND ${GIT_EXECUTABLE} ${DIR_UP} describe --abbrev=0 --tags --match "v[0-9]*.[0-9]*"
         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
         OUTPUT_VARIABLE PROJECT_VERSION_STRING
         OUTPUT_STRIP_TRAILING_WHITESPACE
@@ -34,12 +35,12 @@ if(GIT_TAG_FOUND) # parse the rest of git info
     # set main branch
     set(GIT_MAIN_BRANCH "main")
     # get number of commits since last tag
-    execute_process(COMMAND ${GIT_EXECUTABLE} rev-list ${PROJECT_VERSION_STRING}..HEAD --count
+    execute_process(COMMAND ${GIT_EXECUTABLE} ${DIR_UP} rev-list ${PROJECT_VERSION_STRING}..HEAD --count
         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
         OUTPUT_VARIABLE PROJECT_VERSION_PATCH
         OUTPUT_STRIP_TRAILING_WHITESPACE)
     # get current branch
-    execute_process(COMMAND ${GIT_EXECUTABLE} rev-parse --abbrev-ref HEAD
+    execute_process(COMMAND ${GIT_EXECUTABLE} ${DIR_UP} rev-parse --abbrev-ref HEAD 
         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
         OUTPUT_VARIABLE PROJECT_VERSION_BRANCH
         OUTPUT_STRIP_TRAILING_WHITESPACE)
@@ -49,7 +50,7 @@ if(GIT_TAG_FOUND) # parse the rest of git info
         set(WORKTREE_POSTFIX "${WORKTREE_POSTFIX}-stable")
     else()
         # we are on dev branch, mark version as dev and add current commit SHA
-        execute_process(COMMAND ${GIT_EXECUTABLE} rev-parse --short HEAD
+        execute_process(COMMAND ${GIT_EXECUTABLE} ${DIR_UP} rev-parse --short HEAD
             WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
             OUTPUT_VARIABLE PROJECT_VERSION_COMMIT_SHA
             OUTPUT_STRIP_TRAILING_WHITESPACE)
@@ -58,7 +59,7 @@ if(GIT_TAG_FOUND) # parse the rest of git info
     message(STATUS "Build from ${PROJECT_VERSION_BRANCH} branch!")
 
     # find if there are any unstaged changes
-    execute_process(COMMAND ${GIT_EXECUTABLE} diff HEAD --stat
+    execute_process(COMMAND ${GIT_EXECUTABLE} ${DIR_UP} diff HEAD --stat
         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
         OUTPUT_VARIABLE DIFF_STAT)
     if(DIFF_STAT)
