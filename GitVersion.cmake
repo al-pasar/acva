@@ -1,4 +1,4 @@
-find_package(Git)
+find_package(Git QUIET)
 if(NOT GIT_FOUND)
     message(FATAL_ERROR "Git not found!")
 else()
@@ -53,7 +53,7 @@ if(GIT_TAG_FOUND) # parse the rest of git info
             WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
             OUTPUT_VARIABLE PROJECT_VERSION_COMMIT_SHA
             OUTPUT_STRIP_TRAILING_WHITESPACE)
-        set(WORKTREE_POSTFIX "${WORKTREE_POSTFIX}-dev-{PROJECT_VERSION_COMMIT_SHA}")
+        set(WORKTREE_POSTFIX "${WORKTREE_POSTFIX}-dev-${PROJECT_VERSION_COMMIT_SHA}")
     endif()
     message(STATUS "Build from ${PROJECT_VERSION_BRANCH} branch!")
 
